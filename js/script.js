@@ -4,10 +4,14 @@ var abilitiesTable = document.getElementById("abilities");
 var objectsTable = document.getElementById("objects");
 var customObjectsTable = document.getElementById("customObjects");
 var variablesTable = document.getElementById("variables");
+var rulesTable = document.getElementById("rules");
 
 // Cell variables
 var cell;
 var cell2;
+
+// Local storedProjectJSON for manipulation
+var storedProjectJSON = {};
 
 // Retrieves data from imported JSON file and send it to HTML file
 function getHopscotchData(json)
@@ -22,6 +26,7 @@ function getHopscotchData(json)
     // Original user
     //document.getElementById("originalUser").innerHTML = document.getElementById("originalUser").innerHTML + json.original_user.nickname;
 
+    storedProjectJSON.abilities = {}
     // Loops through abilites.
     for (var i = 0; i < json.abilities.length; i++)
     {
@@ -35,8 +40,14 @@ function getHopscotchData(json)
             // and set text to cell to the name of the ability.
             cell.innerHTML = json.abilities[i].name;
         } // end if
+
+        // Add ability to storedProjectJSON.abilities
+        var currAbilityID = json.abilities[i].abilityID;
+        storedProjectJSON.abilities[currAbilityID] = json.abilities[i];
+
     } // end for
 
+    storedProjectJSON.scenes = []
     // Loops through scenes.
     for (var i = 0; i < json.scenes.length; i++)
     {
@@ -46,8 +57,11 @@ function getHopscotchData(json)
         cell = row.insertCell(0);
         // and set text to cell to the name of the scene
         cell.innerHTML = json.scenes[i].name;
+
+        storedProjectJSON.scenes.push(json.scenes[i]);
     } // end for
 
+    storedProjectJSON.objects = {}
     // Loops through objects.
     for (var i = 0; i < json.objects.length; i++)
     {
@@ -64,6 +78,10 @@ function getHopscotchData(json)
         typeCell.innerHTML = hopscotchObjects(json.objects[i].filename);
         xCell.innerHTML = json.objects[i].xPosition;
         yCell.innerHTML = json.objects[i].yPosition;
+
+        // Add object to storedProjectJSON
+        var currObjectID = json.objects[i].objectID;
+        storedProjectJSON.objects[currObjectID] = json.objects[i];
     }
 
     // Loops through variables if there are any
@@ -91,8 +109,34 @@ function getHopscotchData(json)
           cell = row.insertCell(0);
           // and set text of the cll to the name of the variable.
           cell.innerHTML = json.customObjects[i].name;
+
+          var currObjectID = json.customObjects[i].objectID;
+          storedProjectJSON.objects[currObjectID] = json.customObjects[i];
       }
     }
+
+    storedProjectJSON.rules = {}
+    // Loop through rules
+    for (var i = 0; i < json.rules.length; i++)
+    {
+        var row = rulesTable.insertRow(0);
+        var objectCell = row.insertCell(0);
+        var ruleDescCell = row.insertCell(1);
+
+        var currObjectID = json.rules[i].objectID;
+        storedProjectJSON.rules[currObjectID] = json.rules[i];
+
+        objectCell.innerHTML = storedProjectJSON.objects[currObjectID].name;
+        ruleDescCell.innerHTML = json.rules[i].parameters[0].datum.description; // this is really dodgy and just for game starts
+
+    }
+
+
+    // Store code differently
+
+    // Each blocks for an ability can be accessed by the ability ID — key: abilityID, value: ability object notation + list of blocks
+    // Each set of rules for an object can be accessed by object ID - key: objectID, value: rules object notation + list of rules
+
 
 }
 

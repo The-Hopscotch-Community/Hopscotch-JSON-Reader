@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery-jtemplates.js"></script>
         <script type="text/javascript" src="js/script.js"></script>
         <link rel="stylesheet" href="css/style.css">
         <title>Hopscotch JSON Reader</title>
@@ -63,6 +64,18 @@
             <table id="customObjects"></table>
         </div>
 
+        </br>
+
+        <div>
+            <p>Rules:</p>
+            <table id="rules">
+              <tr>
+                <th>Object name</th>
+                <th>Rule description</th>
+              </tr>
+            </table>
+        </div>
+
         </div>
 
         </br>
@@ -92,6 +105,7 @@
             var objectsTable = document.getElementById("objects");
             var customObjectsTable = document.getElementById("customObjects");
             var variablesTable = document.getElementById("variables");
+            var rulesTable = document.getElementById("rules");
 
             // Cell variables
             var cell;
