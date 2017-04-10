@@ -66,7 +66,7 @@ function getHopscotchData(json)
     for (var i = 0; i < json.objects.length; i++)
     {
         // Create new row in objectsTable,
-        var row = objectsTable.insertRow(1);
+        var row = objectsTable.insertRow(i+1);
         // insert new cells, for name, type, x position and y position,
         var nameCell = row.insertCell(0);
         var typeCell = row.insertCell(1);
@@ -119,7 +119,7 @@ function getHopscotchData(json)
     // Loop through rules
     for (var i = 0; i < json.rules.length; i++)
     {
-        var row = rulesTable.insertRow(0);
+        var row = rulesTable.insertRow(i+1);
         var objectCell = row.insertCell(0);
         var ruleDescCell = row.insertCell(1);
 
