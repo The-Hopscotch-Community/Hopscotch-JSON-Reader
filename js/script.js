@@ -27,7 +27,7 @@ function getHopscotchData(json)
     // Original user
     //document.getElementById("originalUser").innerHTML = document.getElementById("originalUser").innerHTML + json.original_user.nickname;
 
-    storedProjectJSON.abilities = {}
+    storedProjectJSON.abilities = {} // keys: abilityID, values: ability matching that ID
     // Loops through abilites.
     for (var i = 0; i < json.abilities.length; i++)
     {
@@ -62,7 +62,7 @@ function getHopscotchData(json)
         storedProjectJSON.scenes.push(json.scenes[i]);
     } // end for
 
-    storedProjectJSON.objects = {}
+    storedProjectJSON.objects = {} // keys: objectID, values: object matching that ID
     // Loops through objects.
     for (var i = 0; i < json.objects.length; i++)
     {
@@ -86,21 +86,26 @@ function getHopscotchData(json)
     }
 
     // Loops through variables if there are any
-
+    storedProjectJSON.variables = {} // keys: variableID, values: variable object
     if (json.variables != null) {
+
       for (var i = 0; i < json.variables.length; i++)
       {
+          var variable = json.variables[i]
+
           // Create new row in variablesTable,
           var row = variablesTable.insertRow(0);
           // insert new cell,
           cell = row.insertCell(0);
           // and set text of the cell to the name of the variable
           cell.innerHTML = json.variables[i].name;
+
+          storedProjectJSON.variables[variable.objectIdString] = variable
       }
     }
 
     // Loops through custom objects (images) if there are any
-
+    // TODO: add this to list of objects too...
     if (json.customObjects != null) {
       for (var i = 0; i < json.customObjects.length; i++)
       {
@@ -165,7 +170,7 @@ function getHopscotchData(json)
               var block = blocks[blockIdx];
               // this will contain a lot of things... control flow, datums etc
 
-              parse(block);
+              parse(block, "");
 
 
             }
@@ -252,13 +257,21 @@ function hopscotchObjects(filename){
     return result;
 }
 
-function parse(block){
+function parse(block, currentString){
 
   // deal with each block depending on its type
+
+  // depending on its type, it will have a number of parameters (0 or more) some have other things
+  // add descriptions depending on name of block (currentString.concat the block.description)
+
+  // if there is a datum in the block's parameters, parse the datum
+  // if it is a datum, it is like a block too
 
   //TODO: terminate at integers, but continue parsing for other values
   // this will parse blocks and datums
   // how will it distinguish an integer and so on
 
   // will this return a string? formatting?
+
+
 }
