@@ -5,6 +5,7 @@ var objectsTable = document.getElementById("objects");
 var customObjectsTable = document.getElementById("customObjects");
 var variablesTable = document.getElementById("variables");
 var rulesTable = document.getElementById("rules");
+var codeTable = document.getElementById("code");
 
 // Cell variables
 var cell;
@@ -131,6 +132,35 @@ function getHopscotchData(json)
 
     }
 
+    /*
+    // Displaying code
+
+    for (var i = 0; i < storedProjectJSON.objects.length; i++)
+    {
+        var row = codeTable.insertRow(i+1);
+        var currObject = storedProjectJSON.objects[i];
+
+        row.innerHTML = currObject.name;
+
+        var currObjectID = currObject.objectID;
+
+        var objectRules = storedProjectJSON.rules[currObjectID]
+
+        /*
+        for (var r = 0; r < objectRules.length; i++)
+        {
+            // loop through the rules for each object
+
+            // loop through the blocks for each rule and parse
+            // this will contain a lot of things... control flow, datums etc
+        }
+        */
+
+        objectCell.innerHTML = storedProjectJSON.objects[currObjectID].name;
+        ruleDescCell.innerHTML = json.rules[i].parameters[0].datum.description; // this is really dodgy and just for game starts
+
+    }
+    */
 
     // Store code differently
 

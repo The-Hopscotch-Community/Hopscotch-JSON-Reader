@@ -1,4 +1,4 @@
-```swift
+```javascript
 for each rule in rules
   if object id of rule exists in rule Table
     insert row under there
