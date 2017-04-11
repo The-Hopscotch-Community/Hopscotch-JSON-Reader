@@ -132,40 +132,52 @@ function getHopscotchData(json)
 
     }
 
-    /*
     // Displaying code
 
     for (var i = 0; i < storedProjectJSON.objects.length; i++)
     {
         var row = codeTable.insertRow(i+1);
-        var currObject = storedProjectJSON.objects[i];
+        var object = storedProjectJSON.objects[i];
 
-        row.innerHTML = currObject.name;
+        //row.innerHTML = object.name;
 
-        var currObjectID = currObject.objectID;
+        var objectID = object.objectID;
+        var rules = storedProjectJSON.rules[objectID];
 
-        var objectRules = storedProjectJSON.rules[currObjectID]
-
-        /*
-        for (var r = 0; r < objectRules.length; i++)
+        for (var ruleIdx = 0; ruleIdx < rules.length; ruleIdx++)
         {
+            var rule = rules[ruleIdx];
             // loop through the rules for each object
 
             // loop through the blocks for each rule and parse
-            // this will contain a lot of things... control flow, datums etc
-        }
-        */
+            var ability = storedProjectJSON.abilities[rule.abilityID]
+            try {
+              var blocks = ability.blocks;
+            } catch (e) { //TODO: find more about catching exceptions. no key exception
 
-        objectCell.innerHTML = storedProjectJSON.objects[currObjectID].name;
-        ruleDescCell.innerHTML = json.rules[i].parameters[0].datum.description; // this is really dodgy and just for game starts
+              // blocks do not exist for this ability
+              break;
+            }
+
+
+            for (var blockIdx = 0; blockIdx < blocks.length; blockIdx++) {
+
+              var block = blocks[blockIdx];
+              // this will contain a lot of things... control flow, datums etc
+
+              parse(block);
+
+
+            }
+
+
+        }
+
+
+        //objectCell.innerHTML = storedProjectJSON.objects[currObjectID].name;
+        //ruleDescCell.innerHTML = json.rules[i].parameters[0].datum.description; // this is reallsy dodgy and just for game starts
 
     }
-    */
-
-    // Store code differently
-
-    // Each blocks for an ability can be accessed by the ability ID — key: abilityID, value: ability object notation + list of blocks
-    // Each set of rules for an object can be accessed by object ID - key: objectID, value: rules object notation + list of rules
 
 
 }
@@ -238,4 +250,15 @@ function hopscotchObjects(filename){
     }
 
     return result;
+}
+
+function parse(block){
+
+  // deal with each block depending on its type
+
+  //TODO: terminate at integers, but continue parsing for other values
+  // this will parse blocks and datums
+  // how will it distinguish an integer and so on
+
+  // will this return a string? formatting?
 }
