@@ -17,4 +17,23 @@ for each rule in rules
 
 function parse(block)
   block description
+  
+```
+
+---
+
+```
+set up documentation for block types
+if value is an integer or a terminal
+    #
+if blocktype = 00 etc
+    if first arg
+        parse(arg)
+
+
+
+depth first search
+context free grammar – terminals are integers,
+add has two args, plus + p, abs() has one arg, which can be a function or a terminal
+
 ```
