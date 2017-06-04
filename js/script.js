@@ -14,6 +14,11 @@ var cell2;
 // Local storedProjectJSON for manipulation
 var storedProjectJSON = {};
 
+// CONSTANTS
+var MOVE_FORWARD_TYPE = 23;
+var TURN_TYPE = 24;
+var PARAMETER_TYPE = 42;
+
 // Retrieves data from imported JSON file and send it to HTML file
 function getHopscotchData(json)
 {
@@ -122,6 +127,7 @@ function getHopscotchData(json)
     }
 
     storedProjectJSON.rules = {}
+    console.log(json.rules);
     // Loop through rules
     for (var i = 0; i < json.rules.length; i++)
     {
@@ -130,7 +136,11 @@ function getHopscotchData(json)
         var ruleDescCell = row.insertCell(1);
 
         var currObjectID = json.rules[i].objectID;
-        storedProjectJSON.rules[currObjectID] = json.rules[i];
+        if !(currObjectID in storedProjectJSON.rules) {
+          storedProjectJSON.rules[currObjectID] = [json.rules[i]];
+        } else {
+          storedProjectJSON.rules[currObjectID].append(json.rules[i]);
+        }
 
         objectCell.innerHTML = storedProjectJSON.objects[currObjectID].name;
         ruleDescCell.innerHTML = json.rules[i].parameters[0].datum.description; // this is really dodgy and just for game starts
@@ -138,21 +148,25 @@ function getHopscotchData(json)
     }
 
     // Displaying code
-
-    for (var i = 0; i < storedProjectJSON.objects.length; i++)
+    rowIdx = 0
+    for (var objectIdKey in storedProjectJSON.objects)
     {
-        var row = codeTable.insertRow(i+1);
-        var object = storedProjectJSON.objects[i];
-
-        //row.innerHTML = object.name;
+        var object = storedProjectJSON.objects[objectIdKey];
+        var row = codeTable.insertRow(rowIdx+1);
+        rowIdx += 1;
+        row.innerHTML = object.name;
 
         var objectID = object.objectID;
         var rules = storedProjectJSON.rules[objectID];
-
+        console.log(rules);
         for (var ruleIdx = 0; ruleIdx < rules.length; ruleIdx++)
         {
             var rule = rules[ruleIdx];
             // loop through the rules for each object
+            console.log(rule);
+            var row = codeTable.insertRow(rowIdx+1);
+            rowIdx += 1;
+            row.innerHTML = rule.description;
 
             // loop through the blocks for each rule and parse
             var ability = storedProjectJSON.abilities[rule.abilityID]
@@ -167,10 +181,11 @@ function getHopscotchData(json)
 
             for (var blockIdx = 0; blockIdx < blocks.length; blockIdx++) {
 
+              row = codeTable.insertRow(i+1);
               var block = blocks[blockIdx];
               // this will contain a lot of things... control flow, datums etc
 
-              parse(block, "");
+              row.innerHTML = parse(block, "");
 
 
             }
@@ -261,17 +276,41 @@ function parse(block, currentString){
 
   // deal with each block depending on its type
 
+  if (block.type == MOVE_FORWARD_TYPE) {
+
+    currentString = currentString.concat(block.description, " ")
+    parse(block.parameters, currentString)
+    currentString = currentString.concat(" pixels \n")
+
+  } else if (block.type == PARAMETER_TYPE) {
+
+    if (block.hasKey(datum)) {
+
+      currentString = currentString.concat("(");
+      parse(block, currentString);
+      currentString = currentString.concat(")");
+
+    } else {
+
+      currentString = currentString.concat(block.defaultValue);
+
+    }
+
+  }
+
+
   // depending on its type, it will have a number of parameters (0 or more) some have other things
   // add descriptions depending on name of block (currentString.concat the block.description)
 
   // if there is a datum in the block's parameters, parse the datum
   // if it is a datum, it is like a block too
+  // block has parameters, datums have params
 
   //TODO: terminate at integers, but continue parsing for other values
   // this will parse blocks and datums
   // how will it distinguish an integer and so on
 
   // will this return a string? formatting?
-
+  return currentString
 
 }
